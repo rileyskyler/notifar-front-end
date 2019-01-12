@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Link, Route } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { Input, InputType} from './Input'
 
 interface UserInput {
@@ -14,10 +14,10 @@ interface SignupState {
 }
 
 enum FieldOption {
-    displayName = "displayName",
-    email = "email",
-    password = 'password',
-    passwordConfirm = 'passwordConfirm'
+    DisplayName = "displayName",
+    Email = "email",
+    Password = 'password',
+    PasswordConfirm = 'passwordConfirm'
 }
 
 class Signup extends React.Component <{},SignupState>{
@@ -35,17 +35,55 @@ class Signup extends React.Component <{},SignupState>{
         }
 
         this.inputHandler = this.inputHandler.bind(this)
+        this.submitHandler = this.submitHandler.bind(this)
+
     }
 
-    inputHandler(data: any) {
+    inputHandler(inputData: any) {
 
-        const key = Object.keys(data)[0]
-        const value = data[key]
+        const key = Object.keys(inputData)[0]
+        const value = inputData[key]
 
-        this.setState((prevState : any) => {
+        this.setState((prevState: any) => {
             return prevState.userInput[key] = value
         })
 
+    }
+
+    submitHandler() {
+
+        let passed : boolean = true
+
+        const userInput : any = this.state.userInput;
+        
+        Object.keys(userInput).forEach((key: any) : any => {
+            //no whitespace before or after
+            const input : string = userInput[key].trim()
+
+            switch(key){
+
+                case FieldOption.DisplayName:
+                    console.log(input)
+                break;
+
+                case FieldOption.Email:
+                    console.log(input)
+                break;
+
+                case FieldOption.Password:
+                    console.log(input)
+                break;
+
+                case FieldOption.PasswordConfirm:
+                    console.log(input)
+                break;
+
+
+            }
+
+        })
+
+        console.log(passed)
     }
 
     render() {
@@ -56,7 +94,7 @@ class Signup extends React.Component <{},SignupState>{
                 
                 <Input
                     title={'Display Name'}
-                    field={FieldOption.displayName}
+                    field={FieldOption.DisplayName}
                     inputType={InputType.text}
                     inputHandler={this.inputHandler}
                     value={this.state.userInput.displayName}
@@ -64,7 +102,7 @@ class Signup extends React.Component <{},SignupState>{
 
                 <Input
                     title={'Email'}
-                    field={FieldOption.email}
+                    field={FieldOption.Email}
                     inputType={InputType.text}
                     inputHandler={this.inputHandler}
                     value={this.state.userInput.email}
@@ -72,7 +110,7 @@ class Signup extends React.Component <{},SignupState>{
 
                 <Input
                     title={'Password'}
-                    field={FieldOption.password}
+                    field={FieldOption.Password}
                     inputType={InputType.password}
                     inputHandler={this.inputHandler}
                     value={this.state.userInput.password}
@@ -80,15 +118,16 @@ class Signup extends React.Component <{},SignupState>{
 
                 <Input
                     title={'Confirm Password'}
-                    field={FieldOption.passwordConfirm}
+                    field={FieldOption.PasswordConfirm}
                     inputType={InputType.password}
                     inputHandler={this.inputHandler}
                     value={this.state.userInput.passwordConfirm}
                 />
 
-                <button>Sign Up</button>
+                <button onClick={() => this.submitHandler()}>Sign Up</button>
                 
                 <Link to={'/login'}>Already have an account?</Link>
+
             </div>
         )
     }

@@ -6,11 +6,11 @@ export enum InputType {
 }
 
 interface InputProps {
-    title: string;
-    inputType: InputType;
+    title : string;
+    inputType : InputType;
     inputHandler: Function;
-    field: any;
-    value: string;
+    field : any;
+    value : string;
 }
 
 export class Input extends React.Component<InputProps,{}>{
