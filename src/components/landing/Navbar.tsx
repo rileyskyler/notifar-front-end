@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { NavLink } from 'react-router-dom'
-import Login from './auth/Login'
+// import Login from './auth/Login'
 import Signup from './auth/Signup'
 
 class Landing extends React.Component {

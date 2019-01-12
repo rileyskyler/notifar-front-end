@@ -1,16 +1,17 @@
-import * as React from 'react'
-import { Link } from 'react-router-dom'
-import { Input, InputType} from './Input'
+import * as React from 'react';
+import { Link } from 'react-router-dom';
+import { Input, InputType, Content, ContentType } from './Input';
+import * as EmailValidator from 'email-validator';
 
-interface UserInput {
-    displayName: string;
-    email: string;
-    password: string;
-    passwordConfirm: string;
+interface SignupInput {
+    displayName: Content;
+    email: Content;
+    password: Content;
+    passwordConfirm: Content;
 }
 
 interface SignupState {
-    userInput: UserInput;
+    signupInput: SignupInput;
 }
 
 enum FieldOption {
@@ -26,11 +27,23 @@ class Signup extends React.Component <{},SignupState>{
         super(props)
 
         this.state = {
-            userInput: {
-                displayName:'',
-                email:'',
-                password:'',
-                passwordConfirm:''
+            signupInput: {
+                displayName: {
+                    value: '',
+                    error: ''
+                },
+                email: {
+                    value: '',
+                    error: ''
+                },
+                password: {
+                    value: '',
+                    error: ''
+                },
+                passwordConfirm: {
+                    value: '',
+                    error: ''
+                }
             }
         }
 
@@ -45,44 +58,77 @@ class Signup extends React.Component <{},SignupState>{
         const value = inputData[key]
 
         this.setState((prevState: any) => {
-            return prevState.userInput[key] = value
+            return prevState.signupInput[key].value = value
         })
 
     }
 
     submitHandler() {
 
-        let passed : boolean = true
-
-        const userInput : any = this.state.userInput;
+        const signupInput : any = this.state.signupInput;
         
-        Object.keys(userInput).forEach((key: any) : any => {
-            //no whitespace before or after
-            const input : string = userInput[key].trim()
+        const passed = (Object.keys(signupInput)).forEach((key: any) : any => {
 
+            this.setState((prevState : any) => {
+                prevState.signupInput[key].error = '';
+                return prevState;
+            })
+            
+            const errorHandler = (key: string, error: string) => {
+                this.setState((prevState: any) => {
+                    prevState.signupInput[key].error = error;
+                    return prevState;
+                })
+            }
+
+            const value : string = (signupInput[key].value).trim()
+
+            if(!value.length) {
+                errorHandler(key, 'Must not be empty!');
+                return
+            }
+            
             switch(key){
 
                 case FieldOption.DisplayName:
-                    console.log(input)
+
                     break;
 
                 case FieldOption.Email:
-                    console.log(input)
-                    break;
 
+                    if(!EmailValidator.validate(value)){
+                        errorHandler(key, 'Not a valid email address!')
+                    }
+
+                    break;
+                        
                 case FieldOption.Password:
-                    console.log(input)
+                        
                     break;
 
                 case FieldOption.PasswordConfirm:
-                    console.log(input)
+                    if(value !== this.state.signupInput.password.value) {
+
+                        errorHandler(FieldOption.Password, 'Passwords do not match!')
+
+                        this.setState((prevState) => {
+                            prevState.signupInput.password.value = ''
+                            prevState.signupInput.passwordConfirm.value = ''
+                            return prevState
+                        })
+
+                    }
                     break;
 
             }
 
         })
 
-        console.log(passed)
+        // if(passed) {
+        //     console.log('success')
+        // } else {
+        //     console.log('fail')
+        // }
     }
 
     render() {
@@ -96,15 +142,15 @@ class Signup extends React.Component <{},SignupState>{
                     field={FieldOption.DisplayName}
                     inputType={InputType.text}
                     inputHandler={this.inputHandler}
-                    value={this.state.userInput.displayName}
+                    content={this.state.signupInput.displayName}
                 />
 
                 <Input
                     title={'Email'}
-                    field={FieldOption.Email}
+                    field={FieldOption.Email} 
                     inputType={InputType.text}
                     inputHandler={this.inputHandler}
-                    value={this.state.userInput.email}
+                    content={this.state.signupInput.email}
                 />
 
                 <Input
@@ -112,7 +158,7 @@ class Signup extends React.Component <{},SignupState>{
                     field={FieldOption.Password}
                     inputType={InputType.password}
                     inputHandler={this.inputHandler}
-                    value={this.state.userInput.password}
+                    content={this.state.signupInput.password}
                 />
 
                 <Input
@@ -120,7 +166,7 @@ class Signup extends React.Component <{},SignupState>{
                     field={FieldOption.PasswordConfirm}
                     inputType={InputType.password}
                     inputHandler={this.inputHandler}
-                    value={this.state.userInput.passwordConfirm}
+                    content={this.state.signupInput.passwordConfirm}
                 />
 
                 <button onClick={() => this.submitHandler()}>Sign Up</button>
