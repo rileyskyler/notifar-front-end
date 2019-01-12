@@ -64,20 +64,19 @@ class Signup extends React.Component <{},SignupState>{
 
                 case FieldOption.DisplayName:
                     console.log(input)
-                break;
+                    break;
 
                 case FieldOption.Email:
                     console.log(input)
-                break;
+                    break;
 
                 case FieldOption.Password:
                     console.log(input)
-                break;
+                    break;
 
                 case FieldOption.PasswordConfirm:
                     console.log(input)
-                break;
-
+                    break;
 
             }
 
