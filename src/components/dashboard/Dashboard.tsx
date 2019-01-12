@@ -1,7 +1,5 @@
 import * as React from 'react'
 
-import Login from './auth/Login'
-
 class Dashboard extends React.Component {
     render() {
 

@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom'
 
-import Landing from './components/Landing'
-import Dashboard from './components/Dashboard'
+import Landing from './components/landing/Landing'
+import Dashboard from './components/dashboard/Dashboard'
 
 export interface AppProps {
 

@@ -3,13 +3,11 @@ import { Link, Route } from 'react-router-dom'
 import { Input, InputType} from './Input'
 
 interface UserInput {
-    displayName: string;
     email: string;
     password: string;
-    passwordConfirm: string;
 }
 
-interface SignupState {
+interface LoginState {
     userInput: UserInput;
 }
 
@@ -20,17 +18,15 @@ enum FieldOption {
     passwordConfirm = 'passwordConfirm'
 }
 
-class Signup extends React.Component <{},SignupState>{
+class Login extends React.Component <{},LoginState>{
 
     constructor(props: any) {
         super(props)
 
         this.state = {
             userInput: {
-                displayName:'',
                 email:'',
                 password:'',
-                passwordConfirm:''
             }
         }
 
@@ -53,43 +49,28 @@ class Signup extends React.Component <{},SignupState>{
         return (
             <div>
                 <Link to="/">Close</Link>
-                
-                <Input
-                    name={'Display Name'}
-                    field={FieldOption.displayName}
-                    inputType={InputType.text}
-                    inputHandler={this.inputHandler}
-                />
 
                 <Input
-                    name={'Email'}
+                    title={'Email'}
                     field={FieldOption.email}
                     inputType={InputType.text}
                     inputHandler={this.inputHandler}
+                    value={this.state.userInput.email}
                 />
 
                 <Input
-                    name={'Password'}
+                    title={'Password'}
                     field={FieldOption.password}
                     inputType={InputType.password}
                     inputHandler={this.inputHandler}
+                    value={this.state.userInput.password}
                 />
 
-                <Input
-                    name={'Confirm Password'}
-                    field={FieldOption.passwordConfirm}
-                    inputType={InputType.password}
-                    inputHandler={this.inputHandler}
-                />
-
-                <div>
-                    {this.state.userInput.email}
-                </div>
-
-                <button>Submit</button>
+                <button>Log In</button>
+                <Link to={'/sign_up'}>Don't have an account?</Link>
             </div>
         )
     }
 }
 
-export default Signup
+export default Login

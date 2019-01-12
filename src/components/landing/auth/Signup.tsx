@@ -3,11 +3,13 @@ import { Link, Route } from 'react-router-dom'
 import { Input, InputType} from './Input'
 
 interface UserInput {
+    displayName: string;
     email: string;
     password: string;
+    passwordConfirm: string;
 }
 
-interface LoginState {
+interface SignupState {
     userInput: UserInput;
 }
 
@@ -18,15 +20,17 @@ enum FieldOption {
     passwordConfirm = 'passwordConfirm'
 }
 
-class Login extends React.Component <{},LoginState>{
+class Signup extends React.Component <{},SignupState>{
 
     constructor(props: any) {
         super(props)
 
         this.state = {
             userInput: {
+                displayName:'',
                 email:'',
                 password:'',
+                passwordConfirm:''
             }
         }
 
@@ -49,25 +53,45 @@ class Login extends React.Component <{},LoginState>{
         return (
             <div>
                 <Link to="/">Close</Link>
+                
+                <Input
+                    title={'Display Name'}
+                    field={FieldOption.displayName}
+                    inputType={InputType.text}
+                    inputHandler={this.inputHandler}
+                    value={this.state.userInput.displayName}
+                />
 
                 <Input
-                    name={'Email'}
+                    title={'Email'}
                     field={FieldOption.email}
                     inputType={InputType.text}
                     inputHandler={this.inputHandler}
+                    value={this.state.userInput.email}
                 />
 
                 <Input
-                    name={'Password'}
+                    title={'Password'}
                     field={FieldOption.password}
                     inputType={InputType.password}
                     inputHandler={this.inputHandler}
+                    value={this.state.userInput.password}
                 />
 
-                <button>Submit</button>
+                <Input
+                    title={'Confirm Password'}
+                    field={FieldOption.passwordConfirm}
+                    inputType={InputType.password}
+                    inputHandler={this.inputHandler}
+                    value={this.state.userInput.passwordConfirm}
+                />
+
+                <button>Sign Up</button>
+                
+                <Link to={'/login'}>Already have an account?</Link>
             </div>
         )
     }
 }
 
-export default Login
+export default Signup
