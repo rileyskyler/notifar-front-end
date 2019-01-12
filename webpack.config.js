@@ -2,7 +2,8 @@ module.exports = {
     entry: "./src/index.tsx",
     output: {
         filename: "bundle.js",
-        path: __dirname + "/dist"
+        path: __dirname + "/dist",
+        publicPath: '/',
     },
 
     // Enable sourcemaps for debugging webpack's output.
@@ -17,10 +18,30 @@ module.exports = {
         rules: [
             // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
             { test: /\.tsx?$/, loader: "awesome-typescript-loader" },
-
+            // { test: /\.jpg?$/, loader: "file-loader"},
+            {
+                test: /\.(gif|png|jpe?g|svg)$/i,
+                use: [
+                  'file-loader',
+                  {
+                    loader: 'image-webpack-loader',
+                    options: {
+                      bypassOnDebug: true, // webpack@1.x
+                      disable: true, // webpack@2.x and newer
+                    },
+                  },
+                ],
+              },
+              {
+                test: /\.css$/,
+                use: ['style-loader', 'css-loader'],
+              },
             // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
             { enforce: "pre", test: /\.js$/, loader: "source-map-loader" }
         ]
+    },
+    devServer: {
+        historyApiFallback: true,
     },
 
     // When importing a module whose path matches one of the following, just
