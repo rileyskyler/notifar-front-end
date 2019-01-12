@@ -8,6 +8,8 @@ export enum InputType {
 interface InputProps {
     name: string
     inputType: InputType
+    inputHandler: Function
+    field: any
 }
 
 export class Input extends React.Component<InputProps,{}>{
@@ -15,7 +17,7 @@ export class Input extends React.Component<InputProps,{}>{
         return (
             <div>
                 <p>{this.props.name}</p>
-                <input type={this.props.inputType}></input>
+                <input type={this.props.inputType} onChange={(e) => this.props.inputHandler({[this.props.field]:e.target.value})}></input>
             </div>
         )
     }

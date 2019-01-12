@@ -5,13 +5,12 @@ import Signup from './auth/Signup'
 
 class Landing extends React.Component {
     render() {
-        console.log((this.props as any).match)
         return (
             <div>
                 <div>
                     <ul>
-                        <li><Link to='/login'>Login</Link></li>
-                        <li><Link to='/signup'>Signup</Link></li>
+                        <li><Link to={'/login'}>Login</Link></li>
+                        <li><Link to={'/signup'}>Signup</Link></li>
                     </ul>
                 </div>
 
