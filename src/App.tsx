@@ -14,8 +14,8 @@ export class App extends React.Component<AppProps, {}> {
     render() : any {
         return (
             <Switch>
+                <Route path='/dashboard' component={Dashboard} exact/>
                 <Route path='/:option?' component={Landing} exact/>
-                <Route path='/dashboard' component={Dashboard}/>
             </Switch>
         )
     }

@@ -5,7 +5,9 @@ import Signup from './auth/Signup'
 import Navbar from './Navbar'
 
 class Landing extends React.Component {
+
     render() {
+
         return (
             <div>
                 
@@ -17,6 +19,7 @@ class Landing extends React.Component {
                 </Switch>
 
                 <h1>Notifar</h1>
+
                 
             </div>
         )

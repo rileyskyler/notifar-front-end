@@ -1,12 +1,13 @@
 import * as React from 'react'
+import GoogleApiWrapper from './Map'
 
 class Dashboard extends React.Component {
     render() {
 
         return (
             <div>
-                <div>NAVBAR</div>
-                
+                <div>DASHBOARD</div>
+                <GoogleApiWrapper/>
           
             </div>
         )
@@ -14,3 +15,4 @@ class Dashboard extends React.Component {
 }
 
 export default Dashboard
+
