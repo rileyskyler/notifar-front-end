@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Input, InputType, Content, ContentType } from './Input';
 import * as EmailValidator from 'email-validator';
 
+
 interface SignupInput {
     displayName: Content;
     email: Content;
@@ -67,7 +68,7 @@ class Signup extends React.Component <{},SignupState>{
 
         const signupInput : any = this.state.signupInput;
         
-        const passed = (Object.keys(signupInput)).forEach((key: any) : any => {
+        const passed = (Object.keys(signupInput).map((key: any) : any => {
 
             this.setState((prevState : any) => {
                 prevState.signupInput[key].error = '';
@@ -85,26 +86,30 @@ class Signup extends React.Component <{},SignupState>{
 
             if(!value.length) {
                 errorHandler(key, 'Must not be empty!');
-                return
+                return false
             }
             
             switch(key){
 
                 case FieldOption.DisplayName:
-
-                    break;
+                    
+                return true
+                
 
                 case FieldOption.Email:
 
                     if(!EmailValidator.validate(value)){
-                        errorHandler(key, 'Not a valid email address!')
+                        errorHandler(key, 'Not a valid email address!');
+                        return false;
                     }
-
-                    break;
+                return true
+                    
                         
                 case FieldOption.Password:
-                        
-                    break;
+                    
+                
+                return true
+                    
 
                 case FieldOption.PasswordConfirm:
                     if(value !== this.state.signupInput.password.value) {
@@ -117,18 +122,49 @@ class Signup extends React.Component <{},SignupState>{
                             return prevState
                         })
 
+                        return false
                     }
-                    break;
+                    
+                return true
+                    
 
             }
 
+        }))
+        .every((i: any ) : any => {
+            return i
         })
 
-        // if(passed) {
-        //     console.log('success')
-        // } else {
-        //     console.log('fail')
-        // }
+
+        
+        if(passed) {
+            
+            console.log('success')
+            const { displayName, email, password } = this.state.signupInput
+
+            const reqBody = {
+                query: `
+                    mutation {
+                        createUser(userInput: {name:"${displayName.value}", email:"${email.value}" password:"${password.value}"}) {
+                            _id,
+                            name,
+                            email
+                        }
+                    }
+                `
+            }
+
+            fetch('http://localhost:1337/api', {
+                method: 'POST',
+                body: JSON.stringify(reqBody),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+        
+        } else {
+            throw new Error()
+        }
     }
 
     render() {

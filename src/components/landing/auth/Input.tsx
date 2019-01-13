@@ -35,7 +35,7 @@ export class Input extends React.Component<InputProps,{}>{
                     style={{border: `1px solid ${this.props.content.error?'red':'black'}`}}
                 >
                 </input>
-                <p style={{color: 'red', fontSize: '8px'}}>{this.props.content.error}</p>
+                <p style={{'color': 'red', fontSize: '8px'}}>{this.props.content.error}</p>
             </div>
         )
     }

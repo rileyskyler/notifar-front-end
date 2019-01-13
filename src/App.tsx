@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 
 import Landing from './components/landing/Landing'
 import Dashboard from './components/dashboard/Dashboard'
@@ -7,6 +7,8 @@ import Dashboard from './components/dashboard/Dashboard'
 export interface AppProps {
 
 }
+
+console.log('we')
 
 export class App extends React.Component<AppProps, {}> {
     render() : any {
