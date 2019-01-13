@@ -1,76 +1,172 @@
-// import * as React from 'react'
-// import { Link, Route } from 'react-router-dom'
-// import { Input, InputType} from './Input'
+import * as React from 'react';
+import { Link, Redirect } from 'react-router-dom';
+import { Input, InputType, Content, ContentType } from './Input';
+import * as EmailValidator from 'email-validator';
 
-// interface UserInput {
-//     email: string;
-//     password: string;
-// }
 
-// interface LoginState {
-//     userInput: UserInput;
-// }
+interface LoginInput {
+    email: Content;
+    password: Content;
+}
 
-// enum FieldOption {
-//     displayName = "displayName",
-//     email = "email",
-//     password = 'password',
-//     passwordConfirm = 'passwordConfirm'
-// }
+interface LoginState {
+    loginInput: LoginInput;
+}
 
-// class Login extends React.Component <{},LoginState>{
+enum FieldOption {
+    Email = "email",
+    Password = 'password',
+}
 
-//     constructor(props: any) {
-//         super(props)
+class Login extends React.Component <{},LoginState>{
 
-//         this.state = {
-//             userInput: {
-//                 email:'',
-//                 password:'',
-//             }
-//         }
+    constructor(props: any) {
+        super(props)
 
-//         this.inputHandler = this.inputHandler.bind(this)
-//     }
+        this.state = {
+            loginInput: {
+                email: {
+                    value: '',
+                    error: ''
+                },
+                password: {
+                    value: '',
+                    error: ''
+                }
+            }
+        }
 
-//     inputHandler(data: any) {
+        this.inputHandler = this.inputHandler.bind(this)
+        this.submitHandler = this.submitHandler.bind(this)
 
-//         const key = Object.keys(data)[0]
-//         const value = data[key]
+    }
 
-//         this.setState((prevState : any) => {
-//             return prevState.userInput[key] = value
-//         })
+    inputHandler(inputData: any) {
 
-//     }
+        const key = Object.keys(inputData)[0]
+        const value = inputData[key]
 
-//     render() {
+        this.setState((prevState: any) => {
+            return prevState.loginInput[key].value = value
+        })
 
-//         return (
-//             <div>
-//                 <Link to="/">Close</Link>
+    }
 
-//                 <Input
-//                     title={'Email'}
-//                     field={FieldOption.email}
-//                     inputType={InputType.text}
-//                     inputHandler={this.inputHandler}
-//                     value={this.state.userInput.email}
-//                 />
+    async submitHandler() {
 
-//                 <Input
-//                     title={'Password'}
-//                     field={FieldOption.password}
-//                     inputType={InputType.password}
-//                     inputHandler={this.inputHandler}
-//                     value={this.state.userInput.password}
-//                 />
+        const loginInput : any = this.state.loginInput;
+        
+        const passed = (Object.keys(loginInput).map((key: any) : any => {
 
-//                 <button>Log In</button>
-//                 <Link to={'/sign_up'}>Don't have an account?</Link>
-//             </div>
-//         )
-//     }
-// }
+            this.setState((prevState : any) => {
+                prevState.loginInput[key].error = '';
+                return prevState;
+            })
+            
+            const errorHandler = (key: string, error: string) => {
+                this.setState((prevState: any) => {
+                    prevState.loginInput[key].error = error;
+                    return prevState;
+                })
+            }
 
-// export default Login
+            const value : string = (loginInput[key].value).trim()
+
+            if(!value.length) {
+                errorHandler(key, 'must not be empty!');
+                return false
+            }
+            
+            switch(key){
+                
+                case FieldOption.Email:
+
+                    if(!EmailValidator.validate(value)){
+                        errorHandler(key, 'address not valid!');
+                        return false;
+                    }
+                return true
+                    
+                        
+                case FieldOption.Password:
+                    //Password checks
+                return true
+                    
+            }
+
+        }))
+        .every(i => {return i})
+
+        console.log(passed)
+        
+        if(passed) {
+            
+            console.log('success')
+            const { email, password } = this.state.loginInput
+
+            const reqBody = {
+                query: `
+                    query { login(loginInput: {email:"${email.value}", password: "${password.value}"})
+                        {
+                            token
+                        }
+                    }
+                `
+            }
+
+            let res;
+            try {
+
+                res = await fetch('http://localhost:1337/api', {
+                    method: 'POST',
+                    body: JSON.stringify(reqBody),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+
+            }
+            catch (err) {
+                throw err
+            }
+
+            if(res.status === 200) {
+                (this.props as any).history.push('/dashboard')
+            }
+            
+
+        }
+    }
+
+    render() {
+
+        return (
+            <div>
+                <Link to="/">Close</Link>
+
+                <Input
+                    title={'Email'}
+                    field={FieldOption.Email} 
+                    inputType={InputType.text}
+                    inputHandler={this.inputHandler}
+                    content={this.state.loginInput.email}
+                />
+
+                <Input
+                    title={'Password'}
+                    field={FieldOption.Password}
+                    inputType={InputType.password}
+                    inputHandler={this.inputHandler}
+                    content={this.state.loginInput.password}
+                />
+
+                <button onClick={() => this.submitHandler()}>Sign Up</button>
+                
+                <Link to={'/sign_up'}>Don't have an account?</Link>
+
+            </div>
+        )
+    }
+}
+
+export default Login

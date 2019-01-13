@@ -64,7 +64,7 @@ class Signup extends React.Component <{},SignupState>{
 
     }
 
-    submitHandler() {
+    async submitHandler() {
 
         const signupInput : any = this.state.signupInput;
         
@@ -126,15 +126,11 @@ class Signup extends React.Component <{},SignupState>{
                     }
                     
                 return true
-                    
 
             }
 
         }))
-        .every((i: any ) : any => {
-            return i
-        })
-
+        .every(i => {return i})
 
         
         if(passed) {
@@ -154,16 +150,14 @@ class Signup extends React.Component <{},SignupState>{
                 `
             }
 
-            fetch('http://localhost:1337/api', {
+            const res = await fetch('http://localhost:1337/api', {
                 method: 'POST',
                 body: JSON.stringify(reqBody),
                 headers: {
                     'Content-Type': 'application/json'
                 }
             })
-        
-        } else {
-            throw new Error()
+
         }
     }
 
