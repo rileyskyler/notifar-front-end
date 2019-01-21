@@ -22,7 +22,7 @@ enum FieldOption {
     PasswordConfirm = 'passwordConfirm'
 }
 
-class Signup extends React.Component <{},SignupState>{
+class Signup extends React.Component <{}, SignupState>{
 
     constructor(props: any) {
         super(props)

@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Link, Redirect } from 'react-router-dom';
-import { Input, InputType, Content, ContentType } from './Input';
+import { Link, withRouter } from 'react-router-dom';
+import { Input, InputType, Content } from './Input';
 import * as EmailValidator from 'email-validator';
 
 
@@ -13,12 +13,16 @@ interface LoginState {
     loginInput: LoginInput;
 }
 
+interface LoginProps {
+    updateUserData: Function;
+}
+
 enum FieldOption {
     Email = "email",
     Password = 'password',
 }
 
-class Login extends React.Component <{},LoginState>{
+class Login extends React.Component <LoginProps, LoginState> {
 
     constructor(props: any) {
         super(props)
@@ -26,11 +30,11 @@ class Login extends React.Component <{},LoginState>{
         this.state = {
             loginInput: {
                 email: {
-                    value: '',
+                    value: 'riley.skyler@gmail.com',
                     error: ''
                 },
                 password: {
-                    value: '',
+                    value: '1234',
                     error: ''
                 }
             }
@@ -96,8 +100,6 @@ class Login extends React.Component <{},LoginState>{
 
         }))
         .every(i => {return i})
-
-        console.log(passed)
         
         if(passed) {
             
@@ -108,13 +110,16 @@ class Login extends React.Component <{},LoginState>{
                 query: `
                     query { login(loginInput: {email:"${email.value}", password: "${password.value}"})
                         {
-                            token
+                            userId,
+                            token,
+                            tokenExpiration
                         }
                     }
                 `
             }
 
             let res;
+
             try {
 
                 res = await fetch('http://localhost:1337/api', {
@@ -131,9 +136,11 @@ class Login extends React.Component <{},LoginState>{
             }
 
             if(res.status === 200) {
-                (this.props as any).history.push('/dashboard')
+                const userData = await res.json();
+                console.log(userData)
+                await this.props.updateUserData(userData.data.login);
+                (this.props as any).history.push('/dashboard');
             }
-            
 
         }
     }
@@ -169,4 +176,4 @@ class Login extends React.Component <{},LoginState>{
     }
 }
 
-export default Login
+export default withRouter(Login)

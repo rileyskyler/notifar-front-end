@@ -9,7 +9,7 @@ class MapContainer extends React.Component {
         const triangleCoords = [
             {lat: 25.774, lng: -80.190},
             {lat: 18.466, lng: -66.118}
-          ];
+        ];
 
         return (
             <Map 
